@@ -12,9 +12,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import Plants from '../Icons/Plant.png'
 import moment from 'moment'
-import WateringCollapse from './WateringCollapse'
 import clsx from 'clsx';
-import AccessAlarmsIcon from '@material-ui/icons/AccessAlarms';
+import OpacityIcon from '@material-ui/icons/Opacity';
 import CheckIcon from '@material-ui/icons/Check';
 import { green } from '@material-ui/core/colors';
 
@@ -24,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center'
     },
     container: {
-        width: 340,
+        width: 350,
         marginLeft: theme.spacing(10),
-        marginBottom: theme.spacing(5)
+        marginBottom: theme.spacing(5),
     },
     media: {
     },
@@ -56,11 +55,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+
+
 const getTimeDiff = (lastWateringTime) => {
     const lastestTime = moment(lastWateringTime);
     const currTime = moment();
     const duration = moment.duration(currTime.diff(lastestTime)).asHours();
 
+    return duration;
+}
+
+const getDurationString = (duration) => {
     if (duration >= 24) {
         return `${Math.floor(duration / 24)} days ago`
     }
@@ -75,9 +80,7 @@ const Plant = ({ plant }) => {
     const classes = useStyles();
 
     const [isWatering, setIsWatering] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [selectedId, setSelectedId] = useState(0);
     let timer = useRef();
 
     const buttonClassname = clsx({
@@ -85,24 +88,21 @@ const Plant = ({ plant }) => {
     });
 
     const handleWateringPlant = (id) => {
-        setSelectedId(id)
         setIsWatering(true);
-
-        setLoading(true);
         setSuccess(false);
         timer.current = window.setTimeout(() => {
             setSuccess(true);
-            setLoading(false);
             setIsWatering(false);
-        }, 5000);
+        }, 10000);
     }
 
     const handleStopWateringPlant = () => {
         window.clearTimeout(timer.current);
-        setLoading(false);
         setSuccess(false);
         setIsWatering(false);
     }
+
+    const timeDuration = getTimeDiff(plant.lastWateringTime);
 
     return (
         <>
@@ -119,7 +119,7 @@ const Plant = ({ plant }) => {
                     </Typography>
 
                     <Typography gutterBottom variant="body2" color="textSecondary" component='p'>
-                        Last Time Watered: {getTimeDiff(plant.lastWateringTime)}
+                        Last Time Watered: {getDurationString(timeDuration)}
                     </Typography>
                 </CardContent>
                 <CardActions>
@@ -129,14 +129,14 @@ const Plant = ({ plant }) => {
                                 aria-label="save"
                                 className={buttonClassname}
                             >
-                                {success ? <CheckIcon /> : <AccessAlarmsIcon />}
+                                {success ? <CheckIcon /> : <OpacityIcon />}
                             </Fab>
-                            {loading && <CircularProgress size={68} className={classes.fabProgress} />}
+                            {isWatering && <CircularProgress size={68} className={classes.fabProgress} />}
                         </div>
                     </div>
-                    <Button onClick={() => handleWateringPlant(plant.id)} color='primary' variant='contained'>Water this plant</Button>
+                    <Button disabled={isWatering} onClick={() => handleWateringPlant(plant.id)} color='primary' variant='contained'>{!isWatering ? "Water this plant" : "In Progress"}</Button>
+                    {isWatering && <Button onClick={handleStopWateringPlant} color='primary' variant='contained'>Stop Watering</Button>}
                 </CardActions>
-                <WateringCollapse id={plant.id} selectedId={selectedId} stop={handleStopWateringPlant} isWatering={isWatering} />
             </Card>
         </>
 

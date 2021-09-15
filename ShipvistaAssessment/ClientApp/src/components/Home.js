@@ -2,8 +2,16 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { fetchPlants } from '../store/utils/thunkCreators';
 import Plants from './Plant/Plants.js';
+import { makeStyles } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  padding: {
+    paddingTop: theme.spacing(2)
+  }
+}));
 
 const Home = (props) => {
+  const classes = useStyles();
   const { plants, fetchPlants } = props;
 
   useEffect(() => {
@@ -11,7 +19,7 @@ const Home = (props) => {
   });
 
   return (
-    <div>
+    <div className={classes.padding}>
       <Plants />
     </div>
   )

@@ -17,32 +17,32 @@ namespace ShipvistaAssessment.Controllers
             {
                 Id = 1,
                 LastWateringTime = DateTime.Now.AddDays(-7),
-                name = "Green"
+                name = "Plant 1"
             },
 
             new Plants
             {
                 Id = 2,
                 LastWateringTime = DateTime.Now.AddDays(-5),
-                name = "Blue"
+                name = "Plant 2"
             },
             new Plants
             {
                 Id = 3,
                 LastWateringTime = DateTime.Now.AddDays(-2),
-                name = "Orange"
+                name = "Plant 3"
             },
             new Plants
             {
                 Id = 4,
-                LastWateringTime = DateTime.Now,
-                name = "Purple"
+                LastWateringTime = DateTime.Now.AddHours(-2),
+                name = "Plant 4"
             },
             new Plants
             {
                 Id = 5,
                 LastWateringTime = DateTime.Now,
-                name = "Red"
+                name = "Plant 5"
             },
 
 

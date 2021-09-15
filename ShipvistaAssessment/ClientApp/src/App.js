@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
-import { Layout } from './components/Layout';
 import Home from './components/Home';
 import { Provider } from 'react-redux';
 import store from './store/store';
+import Appbar from './components/Appbar/Appbar';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -11,11 +11,10 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Layout>
-          <Route exact path='/' component={Home} />
-          {/* <Route path='/counter' component={Counter} />
+        <Appbar />
+        <Route exact path='/' component={Home} />
+        {/* <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} /> */}
-        </Layout>
       </Provider>
     );
   }

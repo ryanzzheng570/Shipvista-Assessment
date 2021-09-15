@@ -5,11 +5,17 @@ import { Grid } from '@material-ui/core'
 
 const Plants = (props) => {
     const { plants } = props;
+    console.log(plants);
     return (
         <Grid container>
             {plants.length > 0 && plants.map((plant) => {
                 return (
-                    <Plant key={plant.id} plant={plant} />
+                    <Plant
+                        key={plant.id}
+                        name={plant.name}
+                        id={plant.id}
+                        lastWateringTime={plant.lastWateringTime}
+                    />
                 )
             })}
         </Grid>

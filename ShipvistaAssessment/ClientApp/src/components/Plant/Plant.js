@@ -16,6 +16,8 @@ import clsx from 'clsx';
 import OpacityIcon from '@material-ui/icons/Opacity';
 import CheckIcon from '@material-ui/icons/Check';
 import { green } from '@material-ui/core/colors';
+import { connect } from 'react-redux';
+import { waterThePlant } from '../../store/utils/thunkCreators'
 
 const useStyles = makeStyles((theme) => ({
     plantContainer: {
@@ -55,30 +57,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-
-const getTimeDiff = (lastWateringTime) => {
-    const lastestTime = moment(lastWateringTime);
-    const currTime = moment();
-    const duration = moment.duration(currTime.diff(lastestTime)).asHours();
-
-    return duration;
-}
-
-const getDurationString = (duration) => {
-    if (duration >= 24) {
-        return `${Math.floor(duration / 24)} days ago`
-    }
-    else if (duration >= 1) {
-        return `${Math.floor(duration)} hours ago`
-    }
-
-    return `${Math.floor(duration * 60)} minutes ago`
-}
-
-const Plant = ({ plant }) => {
+const Plant = (props) => {
     const classes = useStyles();
-
+    const { id, name, waterThePlant, lastWateringTime } = props;
     const [isWatering, setIsWatering] = useState(false);
     const [success, setSuccess] = useState(false);
     let timer = useRef();
@@ -93,7 +74,8 @@ const Plant = ({ plant }) => {
         timer.current = window.setTimeout(() => {
             setSuccess(true);
             setIsWatering(false);
-        }, 10000);
+            waterThePlant(id);
+        }, 1000);
     }
 
     const handleStopWateringPlant = () => {
@@ -102,7 +84,27 @@ const Plant = ({ plant }) => {
         setIsWatering(false);
     }
 
-    const timeDuration = getTimeDiff(plant.lastWateringTime);
+
+    const getTimeDiff = (lastWateringTime) => {
+        const lastestTime = moment(lastWateringTime);
+        const currTime = moment();
+        const duration = moment.duration(currTime.diff(lastestTime)).asHours();
+
+        return duration;
+    }
+
+    const getDurationString = (duration) => {
+        if (duration >= 24) {
+            return `${Math.floor(duration / 24)} days ago`
+        }
+        else if (duration >= 1) {
+            return `${Math.floor(duration)} hours ago`
+        }
+
+        return `${Math.floor(duration * 60)} minutes ago`
+    }
+
+    const timeDuration = getTimeDiff(lastWateringTime);
 
     return (
         <>
@@ -110,12 +112,12 @@ const Plant = ({ plant }) => {
                 <CardMedia
                     component='img'
                     className={classes.media}
-                    title={plant.name}
+                    title={name}
                     src={Plants}
                 />
                 <CardContent className={classes.content}>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {plant.name}
+                        {name}
                     </Typography>
 
                     <Typography gutterBottom variant="body2" color="textSecondary" component='p'>
@@ -134,7 +136,7 @@ const Plant = ({ plant }) => {
                             {isWatering && <CircularProgress size={68} className={classes.fabProgress} />}
                         </div>
                     </div>
-                    <Button disabled={isWatering} onClick={() => handleWateringPlant(plant.id)} color='primary' variant='contained'>{!isWatering ? "Water this plant" : "In Progress"}</Button>
+                    <Button disabled={isWatering} onClick={() => handleWateringPlant(id)} color='primary' variant='contained'>{!isWatering ? "Water this plant" : "In Progress"}</Button>
                     {isWatering && <Button onClick={handleStopWateringPlant} color='primary' variant='contained'>Stop Watering</Button>}
                 </CardActions>
             </Card>
@@ -143,4 +145,12 @@ const Plant = ({ plant }) => {
     )
 }
 
-export default Plant
+const mapDispatchToProps = (dispatch) => {
+    return {
+        waterThePlant(id) {
+            dispatch(waterThePlant(id));
+        }
+    }
+};
+
+export default connect(null, mapDispatchToProps)(Plant)

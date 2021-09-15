@@ -4,7 +4,7 @@ import PlantIcon from '../Icons/PlantsIcon'
 const Plant = ({ plant }) => {
     return (
         <div>
-            <PlantIcon />
+            <PlantIcon color={plant.name} />
             <div >{plant.id}</div>
         </div>
     )

@@ -9,6 +9,7 @@ namespace ShipvistaAssessment
     {
         public DateTime LastWateringTime { get; set;}
         public int Id { get; set; }
+        public String name { get; set; }
 
     }
 }

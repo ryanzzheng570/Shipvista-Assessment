@@ -16,28 +16,33 @@ namespace ShipvistaAssessment.Controllers
             new Plants
             {
                 Id = 1,
-                LastWateringTime = DateTime.Now.AddDays(-7)
+                LastWateringTime = DateTime.Now.AddDays(-7),
+                name = "Green"
             },
 
             new Plants
             {
                 Id = 2,
-                LastWateringTime = DateTime.Now.AddDays(-5)
+                LastWateringTime = DateTime.Now.AddDays(-5),
+                name = "Blue"
             },
             new Plants
             {
                 Id = 3,
-                LastWateringTime = DateTime.Now.AddDays(-2)
+                LastWateringTime = DateTime.Now.AddDays(-2),
+                name = "Orange"
             },
             new Plants
             {
                 Id = 4,
-                LastWateringTime = DateTime.Now
+                LastWateringTime = DateTime.Now,
+                name = "Purple"
             },
             new Plants
             {
                 Id = 5,
-                LastWateringTime = DateTime.Now
+                LastWateringTime = DateTime.Now,
+                name = "Red"
             },
 
 

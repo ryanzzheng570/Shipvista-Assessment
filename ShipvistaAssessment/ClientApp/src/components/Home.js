@@ -10,9 +10,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+//Home Component Hook
 const Home = (props) => {
   const classes = useStyles();
-  const { plants, fetchPlants } = props;
+  const { fetchPlants } = props;
 
   useEffect(() => {
     fetchPlants()

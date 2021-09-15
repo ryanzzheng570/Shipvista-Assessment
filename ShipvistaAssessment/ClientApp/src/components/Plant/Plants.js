@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import Plant from './Plant';
 import { Grid } from '@material-ui/core'
 
+//Plants component to display all plant in office
 const Plants = (props) => {
     const { plants } = props;
-    console.log(plants);
     return (
         <Grid container>
             {plants.length > 0 && plants.map((plant) => {

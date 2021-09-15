@@ -16,8 +16,6 @@ export default class App extends Component {
         <MuiThemeProvider theme={theme}>
           <Appbar />
           <Route exact path='/' component={Home} />
-          {/* <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} /> */}
         </MuiThemeProvider>
       </Provider>
     );

@@ -3,7 +3,6 @@ import {
     AppBar,
     Toolbar,
     Typography,
-    IconButton
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -16,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+//App bar component hook 
 const Appbar = () => {
     const classes = useStyles();
     return (

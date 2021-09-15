@@ -10,7 +10,7 @@ import {
     Fab
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import Plants from '../Icons/Plant.png'
+import Plants from '../Images/Plant.png'
 import moment from 'moment'
 import clsx from 'clsx';
 import OpacityIcon from '@material-ui/icons/Opacity';
@@ -18,6 +18,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { green } from '@material-ui/core/colors';
 import { connect } from 'react-redux';
 import { waterThePlant } from '../../store/utils/thunkCreators'
+import ErrorIcon from '@material-ui/icons/Error';
 
 const useStyles = makeStyles((theme) => ({
     plantContainer: {
@@ -57,34 +58,51 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+//Plant Component Hook
 const Plant = (props) => {
     const classes = useStyles();
+
     const { id, name, waterThePlant, lastWateringTime } = props;
     const [isWatering, setIsWatering] = useState(false);
+    const [isAtRest, setIsAtRest] = useState(false);
     const [success, setSuccess] = useState(false);
     let timer = useRef();
+    let restTimer = useRef();
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
     });
 
+    //Handler for user pressing 'Water this plant' buttpm
     const handleWateringPlant = (id) => {
+
+        //Set Watering status to true
         setIsWatering(true);
         setSuccess(false);
+        //Set up 10 seconds timer for watering
         timer.current = window.setTimeout(() => {
+            //If not canceled, set watering status to false and success to true
             setSuccess(true);
             setIsWatering(false);
+            //Mutate the state using Redux
             waterThePlant(id);
-        }, 1000);
+            //Set up 30 seconds section that do now allow user to water again
+            setIsAtRest(true);
+            restTimer.current = window.setTimeout(() => {
+                //User able to water again after 30 seconds
+                setIsAtRest(false);
+            }, 30000);
+        }, 10000);
     }
 
+    // Handler for user to stop watering the plant 
     const handleStopWateringPlant = () => {
         window.clearTimeout(timer.current);
         setSuccess(false);
         setIsWatering(false);
     }
 
-
+    //Get the time difference between now and last time watered the plant
     const getTimeDiff = (lastWateringTime) => {
         const lastestTime = moment(lastWateringTime);
         const currTime = moment();
@@ -93,6 +111,7 @@ const Plant = (props) => {
         return duration;
     }
 
+    //ToString method to dispaly duration in user friendly view
     const getDurationString = (duration) => {
         if (duration >= 24) {
             return `${Math.floor(duration / 24)} days ago`
@@ -123,6 +142,12 @@ const Plant = (props) => {
                     <Typography gutterBottom variant="body2" color="textSecondary" component='p'>
                         Last Time Watered: {getDurationString(timeDuration)}
                     </Typography>
+                    {timeDuration >= 6 &&
+                        <Typography color='error'>
+                            <ErrorIcon />
+                            Your plant has not been water more than 6 hours!
+                        </Typography>
+                    }
                 </CardContent>
                 <CardActions>
                     <div className={classes.root}>
@@ -136,7 +161,7 @@ const Plant = (props) => {
                             {isWatering && <CircularProgress size={68} className={classes.fabProgress} />}
                         </div>
                     </div>
-                    <Button disabled={isWatering} onClick={() => handleWateringPlant(id)} color='primary' variant='contained'>{!isWatering ? "Water this plant" : "In Progress"}</Button>
+                    <Button disabled={isWatering || isAtRest} onClick={() => handleWateringPlant(id)} color='primary' variant='contained'>{!isWatering ? "Water this plant" : "In Progress"}</Button>
                     {isWatering && <Button onClick={handleStopWateringPlant} color='primary' variant='contained'>Stop Watering</Button>}
                 </CardActions>
             </Card>

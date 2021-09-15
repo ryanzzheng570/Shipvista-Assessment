@@ -19,6 +19,7 @@ export const waterMyPlant = (id) => {
     }
 }
 
+//Reducer for Plants
 const reducer = (state = [], action) => {
     switch (action.type) {
         case GET_PLANTS: {

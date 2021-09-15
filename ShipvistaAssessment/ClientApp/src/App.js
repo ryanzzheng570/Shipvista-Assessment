@@ -4,6 +4,8 @@ import Home from './components/Home';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import Appbar from './components/Appbar/Appbar';
+import { MuiThemeProvider } from '@material-ui/core';
+import { theme } from './themes/theme';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -11,10 +13,12 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Appbar />
-        <Route exact path='/' component={Home} />
-        {/* <Route path='/counter' component={Counter} />
+        <MuiThemeProvider theme={theme}>
+          <Appbar />
+          <Route exact path='/' component={Home} />
+          {/* <Route path='/counter' component={Counter} />
         <Route path='/fetch-data' component={FetchData} /> */}
+        </MuiThemeProvider>
       </Provider>
     );
   }
